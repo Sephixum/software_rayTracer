@@ -1,5 +1,6 @@
 #pragma once
 
+#include <array>
 #include <cmath>
 #include <concepts>
 #include <iostream>
@@ -10,11 +11,9 @@ namespace rt {
 template <typename T>
 concept Arithmetic = std::is_arithmetic_v<T>;
 
-template <Arithmetic T> using Vec3T = std::array<T, 3>;
-
 template <Arithmetic T> class Vec3 {
 private:
-  Vec3T<T> arr_;
+  std::array<T, 3> arr_;
 
 public:
   Vec3() = default;
@@ -109,4 +108,4 @@ public:
   }
 };
 
-} // namespace rtr
+} // namespace rt

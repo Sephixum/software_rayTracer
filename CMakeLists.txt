@@ -10,9 +10,9 @@ project(
 
 add_executable(output)
 
-target_include_directories(output PRIVATE include/rt/ include/rt/utils/
-                                        include/rt/globals/)
+target_include_directories(output PRIVATE include/ include/rt/
+                                          include/rt/utils/ include/rt/globals/)
 
-target_sources(output PRIVATE src/main.cpp)
+target_sources(output PRIVATE src/main.cpp src/Sphere.cpp)
 
 target_compile_options(output PRIVATE -Wall)

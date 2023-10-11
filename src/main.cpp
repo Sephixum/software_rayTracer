@@ -1,6 +1,7 @@
 #include <format>
 #include <iostream>
 
+#include "Sphere.hpp"
 #include "Vec3.hpp"
 #include "globals.hpp"
 #include "ray.hpp"
@@ -20,19 +21,22 @@ auto main() -> int {
   const Vec3<float> vertical(0.0f, 2.0f, 0.0f);
   const Vec3<float> starting_point(0.0f, 0.0f, 0.0f);
 
+  Sphere sphere(Vec3<float>(0, 0, 1), 0.5);
+
   for (auto j{globals::kImageHeight - 1}; j >= 0; j--) {
     using namespace globals;
     for (auto i{0}; i < kImageWidth; i++) {
-      auto u = i / float(kImageWidth);
-      auto v = j / float(kImageHeight);
+      auto u = float(i) / float(kImageWidth);
+      auto v = float(j) / float(kImageHeight);
 
       Ray<float> ray(starting_point,
                      lower_left_corner + (horizontal * u) + (vertical * v));
-      Vec3<float> color = rt::SetColor(ray);
+      Vec3<float> color = rt::SetColor(ray, &sphere);
 
       int ir = int(255.99 * color.GetX());
       int ig = int(255.99 * color.GetY());
       int ib = int(255.99 * color.GetZ());
+      // int ib = 1;
       std::puts(std::format("{} {} {}", ir, ig, ib).c_str());
     }
   }

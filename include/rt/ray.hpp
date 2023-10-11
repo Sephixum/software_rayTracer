@@ -18,7 +18,7 @@ public:
   auto GetDirection() const noexcept { return direction_; }
 
   auto PointAtParameter(float t) const {
-    return rt::Vec3<T>(starting_point_ + (direction_ * t));
+    return starting_point_ + (direction_ * t);
   }
 };
 
