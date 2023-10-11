@@ -49,34 +49,18 @@ auto HitSphere(const Vec3<T> &center, float radius, const Ray<T> &ray) -> bool {
 }
 
 template <typename T> auto SetColor(const rt::Ray<T> &ray, HitAble *object) {
-  // T t = HitSphere(Vec3<T>(0, 0, -1), 0.5, ray);
-  // if (t) {
-  //   auto normal =
-  //       utils::UnitVector(ray.PointAtParameter(t) - Vec3<T>(0, 0, -1));
-  //   return Vec3<T>(normal.GetX() + 1, normal.GetY() + 1, normal.GetZ() + 1) *
-  //          globals::kGradientStrength;
-  // }
-  //
-  // rt::Vec3<T> unit_direction = utils::UnitVector(ray.GetDirection());
-  // auto background_blend =
-  //     globals::kGradientStrength * (unit_direction.GetY() + 1);
-
-  // return rt::Vec3<T>(1.0, 1.0, 1.0) * (1.0 - background_blend) +
-  //        rt::Vec3<T>(0.5, 0.7, 1.0) * background_blend;
-
-  // return Vec3<T>(0, 0, 0);
-
-  //--------------------------------------------------------------------
-
   HitRecord record;
   if (object->Hit(ray, 0.0f, MAXFLOAT, record)) {
-    // return Vec3<T>(record.normal.GetX() + 1, record.normal.GetY() + 1,
-    //                record.normal.GetZ() + 1) *
-    //        1;
-    return Vec3<T>(1, 1, 1);
-    // globals::kGradientStrength;
+    return Vec3<T>(record.surface_normal.GetX() + 1,
+                   record.surface_normal.GetY() + 1,
+                   record.surface_normal.GetZ() + 1) *
+           globals::kGradientStrength;
   }
-  return Vec3<T>(0, 0, 0);
+  auto unit_direction = utils::UnitVector(ray.GetDirection());
+  auto background_blend =
+      globals::kGradientStrength * (unit_direction.GetY() + 1);
+  return rt::Vec3<T>(1.0, 1.0, 1.0) * (1.0 - background_blend) +
+         rt::Vec3<T>(0.5, 0.7, 1.0) * background_blend;
 }
 
 } // namespace rt

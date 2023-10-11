@@ -36,7 +36,7 @@ auto main() -> int {
       int ir = int(255.99 * color.GetX());
       int ig = int(255.99 * color.GetY());
       int ib = int(255.99 * color.GetZ());
-      // int ib = 1;
+
       std::puts(std::format("{} {} {}", ir, ig, ib).c_str());
     }
   }
