@@ -9,6 +9,7 @@
 
 class HitAble {
 public:
+  virtual ~HitAble() = default;
   virtual auto Hit(const rt::Ray<float> &ray, float t_min, float t_max,
                    HitRecord &record) const -> bool = 0;
 };

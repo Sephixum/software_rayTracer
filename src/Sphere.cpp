@@ -11,27 +11,28 @@ auto Sphere::Hit(const rt::Ray<float> &ray, float t_min, float t_max,
   Vec3<float> ray_to_center = ray.GetOrigin() - center;
 
   auto a = utils::DotProduct(ray.GetDirection(), ray.GetDirection());
-  auto b = 2.0 * utils::DotProduct(ray_to_center, ray.GetDirection());
-  auto c = utils::DotProduct(ray_to_center, ray_to_center) - (radius * radius);
+  auto half_b = utils::DotProduct(ray_to_center, ray.GetDirection());
+  auto c =
+      (ray_to_center.Length() * ray_to_center.Length()) - (radius * radius);
 
-  const float discriminant = (b * b) - (4 * a * c);
-  if (discriminant > 0) {
-    float temp = ((-b - std::sqrt(discriminant)) / (2 * a));
-    if ((temp < t_max) && (temp > t_min)) {
-      record.distance_from_ray_origin = temp;
-      record.point_of_intersection =
-          ray.PointAtParameter(record.distance_from_ray_origin);
-      record.surface_normal = (record.point_of_intersection - center) / radius;
-      return true;
-    }
-    temp = ((-b + std::sqrt(discriminant)) / (2 * a));
-    if ((temp < t_max) && (temp > t_min)) {
-      record.distance_from_ray_origin = temp;
-      record.point_of_intersection =
-          ray.PointAtParameter(record.distance_from_ray_origin);
-      record.surface_normal = (record.point_of_intersection - center) / radius;
-      return true;
+  const float discriminant = (half_b * half_b) - (a * c);
+  if (discriminant < 0) {
+    return false;
+  }
+
+  // Find the nearest root that lies in the acceptable range
+  auto root = ((-half_b - std::sqrt(discriminant)) / (a));
+  if ((root <= t_min) || (root >= t_max)) {
+    root = ((-half_b + std::sqrt(discriminant)) / (a));
+    if ((root <= t_min) || (root >= t_max)) {
+      return false;
     }
   }
-  return false;
+
+  record.distance_from_ray_origin = root;
+  record.point_of_intersection =
+      ray.PointAtParameter(record.distance_from_ray_origin);
+  record.surface_normal = (record.point_of_intersection - center) / radius;
+
+  return true;
 }

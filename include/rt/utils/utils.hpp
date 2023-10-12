@@ -51,9 +51,7 @@ auto HitSphere(const Vec3<T> &center, float radius, const Ray<T> &ray) -> bool {
 template <typename T> auto SetColor(const rt::Ray<T> &ray, HitAble *object) {
   HitRecord record;
   if (object->Hit(ray, 0.0f, MAXFLOAT, record)) {
-    return Vec3<T>(record.surface_normal.GetX() + 1,
-                   record.surface_normal.GetY() + 1,
-                   record.surface_normal.GetZ() + 1) *
+    return (record.surface_normal + Vec3<T>(1, 1, 1)) *
            globals::kGradientStrength;
   }
   auto unit_direction = utils::UnitVector(ray.GetDirection());
